@@ -1,0 +1,6 @@
+[submodule "libraries/editor"]
+	path = libraries/editor
+	url = https://github.com/KotomichiGames/game-editor.git
+[submodule "libraries/engine"]
+	path = libraries/engine
+	url = https://github.com/KotomichiGames/game-engine.git
