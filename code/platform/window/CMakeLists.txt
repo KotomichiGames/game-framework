@@ -1,10 +1,10 @@
 #=======================================================================================================================
-project(platform_window)
+project(window)
 #=======================================================================================================================
 add_executable(${PROJECT_NAME})
 #=======================================================================================================================
-set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/build/engine/platform/${PROJECT_NAME}"
-                                                 RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/build/engine/platform/${PROJECT_NAME}")
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${BUILD_FOLDER_PATH}/${PROJECT_NAME}"
+                                                 RUNTIME_OUTPUT_DIRECTORY_RELEASE "${BUILD_FOLDER_PATH}/${PROJECT_NAME}")
 #=======================================================================================================================
 target_link_libraries(${PROJECT_NAME}   PRIVATE platform)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
