@@ -1,5 +1,7 @@
 #include <glfw/factory.hpp>
 
+#include <glad/glad.h>
+
 int main()
 {
     constexpr int width  = 800;
@@ -10,10 +12,16 @@ int main()
     const auto window = platform_factory.create_window();
     window->create("Window", width, height);
 
+    gladLoadGL();
+
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+
     // drawing initialization
 
     while (!window->is_closed())
     {
+        glClear(GL_COLOR_BUFFER_BIT);
+
         // drawing
 
         window->update();
