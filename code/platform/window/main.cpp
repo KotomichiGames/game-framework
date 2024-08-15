@@ -16,18 +16,12 @@ int main()
 
     glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-    // drawing initialization
-
     while (!window->is_closed())
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // drawing
-
         window->update();
     }
-
-    // drawing cleanup
 
     window->destroy();
 
