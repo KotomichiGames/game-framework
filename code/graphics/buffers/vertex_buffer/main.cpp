@@ -1,4 +1,5 @@
 #include <glfw/factory.hpp>
+#include <window_instance.hpp>
 
 #include <glad/glad.h>
 
@@ -7,10 +8,10 @@ int main()
     constexpr int width  = 800;
     constexpr int height = 600;
 
-    engine::glfw::Factory platform_factory;
+    auto platform_factory = std::make_shared<engine::glfw::Factory>();
 
-    const auto window = platform_factory.create_window();
-    window->create("Vertex Buffer", width, height);
+    auto& window = engine::WindowInstance::instance();
+    window.create(platform_factory, "Vertex Buffer");
 
     gladLoadGL();
 
@@ -35,20 +36,20 @@ int main()
 
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-    while (!window->is_closed())
+    while (window.is_active())
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(vertex_array);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        window->update();
+        window.update();
     }
 
     glDeleteBuffers(1, &vertex_buffer);
     glDeleteVertexArrays(1, &vertex_array);
 
-    window->destroy();
+    window.destroy();
 
     return 0;
 }
