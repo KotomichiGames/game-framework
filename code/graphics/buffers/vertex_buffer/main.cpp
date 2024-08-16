@@ -11,7 +11,7 @@ int main()
     auto platform_factory = std::make_shared<engine::glfw::Factory>();
 
     auto& window = engine::WindowInstance::instance();
-    window.create(platform_factory, "Vertex Buffer");
+    window.create(platform_factory, { "Vertex Buffer" });
 
     gladLoadGL();
 
