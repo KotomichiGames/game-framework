@@ -5,10 +5,7 @@
 
 int main()
 {
-    constexpr int width  = 800;
-    constexpr int height = 600;
-
-    auto platform_factory = std::make_shared<engine::glfw::Factory>();
+    const auto platform_factory = std::make_shared<engine::glfw::Factory>();
 
     auto& window = engine::WindowInstance::instance();
     window.create(platform_factory, { "Index Buffer" });

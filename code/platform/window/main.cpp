@@ -1,29 +1,27 @@
 #include <glfw/factory.hpp>
+#include <window_instance.hpp>
 
 #include <glad/glad.h>
 
 int main()
 {
-    constexpr int width  = 800;
-    constexpr int height = 600;
+    const auto platform_factory = std::make_shared<engine::glfw::Factory>();
 
-    engine::glfw::Factory platform_factory;
-
-    const auto window = platform_factory.create_window();
-    window->create("Window", width, height);
+    auto& window = engine::WindowInstance::instance();
+    window.create(platform_factory, { "Window" });
 
     gladLoadGL();
 
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-    while (!window->is_closed())
+    while (window.is_active())
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        window->update();
+        window.update();
     }
 
-    window->destroy();
+    window.destroy();
 
     return 0;
 }
