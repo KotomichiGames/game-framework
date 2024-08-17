@@ -6,6 +6,7 @@
 int main()
 {
     const auto platform_factory = std::make_shared<engine::glfw::Factory>();
+    const auto platform = platform_factory->create_platform();
 
     auto& window = engine::WindowInstance::instance();
     window.create(platform_factory, { "Window" });
@@ -19,6 +20,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         window.update();
+
+        platform->update();
     }
 
     window.destroy();
