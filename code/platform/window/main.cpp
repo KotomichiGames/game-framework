@@ -5,11 +5,13 @@
 
 int main()
 {
-    const auto platform_factory = std::make_shared<engine::glfw::Factory>();
-    const auto platform = platform_factory->create_platform();
+    const auto factory = std::make_shared<engine::glfw::Factory>();
+
+    const auto platform = factory->create_platform();
+    const auto context  = factory->create_context();
 
     auto& window = engine::WindowInstance::instance();
-    window.create(platform_factory, { "Window" });
+    window.create(factory, { "Window" });
 
     gladLoadGL();
 
