@@ -12,7 +12,7 @@ int main()
 
     gladLoadGL();
 
-    float const vertices[] =
+    const float vertices[] =
     {
         -0.5f, 0.5f, 0.0f,
          0.5f, 0.5f, 0.0f,
@@ -50,7 +50,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glBindVertexArray(vertex_array);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         window.update();
@@ -61,6 +60,5 @@ int main()
     glDeleteVertexArrays(1, &vertex_array);
 
     window.destroy();
-
     return 0;
 }

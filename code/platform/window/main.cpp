@@ -9,13 +9,12 @@ int main()
     //const auto factory = std::make_shared<engine::glfw::Factory>();
     const auto factory = std::make_shared<engine::win32::Factory>();
 
-    const auto platform = factory->create_platform();
-    const auto context  = factory->create_context();
-
     auto& window = engine::WindowInstance::instance();
     window.create(factory, { "Window" });
 
-    //context->create();
+    const auto platform = factory->create_platform();
+    const auto context  = factory->create_context();
+    context->create(window.handle());
 
     //gladLoadGL();
 

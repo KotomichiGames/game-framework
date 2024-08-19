@@ -12,7 +12,7 @@ int main()
 
     gladLoadGL();
 
-    float const vertices[] =
+    const float vertices[] =
     {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
@@ -47,6 +47,5 @@ int main()
     glDeleteVertexArrays(1, &vertex_array);
 
     window.destroy();
-
     return 0;
 }
