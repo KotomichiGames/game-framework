@@ -1,30 +1,31 @@
-#include <windows/factory.hpp>
+#include <platform_factory.hpp>
+
 #include <window_instance.hpp>
 
-#include <glfw/factory.hpp>
-#include <glad/glad.h>
+#include <opengl/functions.hpp>
+#include <opengl/commands.hpp>
+#include <opengl/macros.hpp>
 
 using namespace engine;
 
 int main()
 {
-    const auto glfw_factory = std::make_shared<glfw::Factory>();
-    //const auto win32_factory = std::make_shared<engine::win32::Factory>();
+    const auto factory = PlatformFactory::create_factory();
 
-    WindowInstance::instance().create(glfw_factory, { "Window" });
+    WindowInstance::instance().create(factory, { "Context" });
 
-    const auto platform = glfw_factory->create_platform();
-    const auto context  = glfw_factory->create_context();
+    const auto platform = factory->create_platform();
+    const auto context  = factory->create_context();
 
     context->create(WindowInstance::instance().handle());
 
-    gladLoadGL();
+    gl::Functions::load();
 
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    gl::Commands::clear(0.5f, 0.5f, 0.5f);
 
     while (WindowInstance::instance().is_active())
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        gl::Commands::clear(gl::color_buffer_bit);
 
         context->update();
         platform->update();

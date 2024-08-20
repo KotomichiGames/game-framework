@@ -9,7 +9,6 @@
         - Binary
 
 - Platform
-    - Context
     - Input
     - Time
 
