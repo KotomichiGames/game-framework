@@ -9,7 +9,7 @@
         - Binary
 
 - Platform
-    - Window
+    - Context
     - Input
     - Time
 
