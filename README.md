@@ -32,6 +32,9 @@
     - Models
     - Skybox
     - Sprites
+    - Particles
+        - Fire
+        - Smoke
 
 - Lighting
     - Diffuse Lighting
