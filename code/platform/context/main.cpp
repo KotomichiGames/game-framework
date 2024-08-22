@@ -14,7 +14,7 @@ int main()
     WindowManager::instance().create(factory, { "Context" });
     WindowManager::instance().open();
 
-    gl::Functions::load();
+    gl::Functions::load_core();
 
     gl::Commands::clear(0.5f, 0.5f, 0.5f);
 

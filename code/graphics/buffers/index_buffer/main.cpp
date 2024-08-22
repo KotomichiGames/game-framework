@@ -17,7 +17,9 @@ int main()
     WindowManager::instance().create(factory, { "Index Buffer" });
     WindowManager::instance().open();
 
-    gl::Functions::load();
+    gl::Functions::load_core();
+    gl::Functions::load_extended();
+
     gladLoadGL();
 
     constexpr float vertices[] =
