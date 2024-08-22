@@ -57,7 +57,7 @@ int main()
         gl::Commands::clear(gl::color_buffer_bit);
 
         glBindVertexArray(vertex_array);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        gl::Commands::draw_elements(gl::triangles, 6);
 
         WindowManager::instance().update();
     }
