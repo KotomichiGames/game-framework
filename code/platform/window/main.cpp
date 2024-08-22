@@ -9,6 +9,7 @@ int main()
     const auto factory = PlatformFactory::create_factory();
 
     WindowInstance::instance().create(factory, { "Window" });
+    WindowInstance::instance().open();
 
     const auto platform = factory->create_platform();
 

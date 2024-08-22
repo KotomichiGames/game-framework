@@ -19,6 +19,8 @@ int main()
 
     context->create(WindowInstance::instance().handle());
 
+    WindowInstance::instance().open();
+
     gl::Functions::load();
 
     gl::Commands::clear(0.5f, 0.5f, 0.5f);
