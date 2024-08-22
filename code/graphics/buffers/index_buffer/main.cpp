@@ -1,6 +1,5 @@
-#include <platform_factory.hpp>
-
-#include <window_instance.hpp>
+#include <window_manager.hpp>
+#include <window_factory.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -12,16 +11,13 @@ using namespace engine;
 
 int main()
 {
-    const auto factory = PlatformFactory::create_factory();
+    const auto factory = WindowFactory::create_factory();
 
-    WindowInstance::instance().create(factory, { "Index Buffer" });
-
-    const auto platform = factory->create_platform();
-    const auto context  = factory->create_context();
-
-    context->create(WindowInstance::instance().handle());
+    WindowManager::instance().create(factory, { "Index Buffer" });
+    WindowManager::instance().open();
 
     gl::Functions::load();
+    gladLoadGL();
 
     constexpr float vertices[] =
     {
@@ -56,23 +52,20 @@ int main()
 
     gl::Commands::clear(0.5f, 0.5f, 0.5f);
 
-    while (WindowInstance::instance().is_active())
+    while (WindowManager::instance().is_active())
     {
         gl::Commands::clear(gl::color_buffer_bit);
 
         glBindVertexArray(vertex_array);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        context->update();
-        platform->update();
+        WindowManager::instance().update();
     }
 
     glDeleteBuffers(1, &vertex_buffer);
     glDeleteBuffers(1, &indices_buffer);
     glDeleteVertexArrays(1, &vertex_array);
 
-    context->destroy();
-
-    WindowInstance::instance().destroy();
+    WindowManager::instance().destroy();
     return 0;
 }
