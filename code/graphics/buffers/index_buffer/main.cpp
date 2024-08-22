@@ -4,6 +4,7 @@
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
 #include <opengl/macros.hpp>
+#include <opengl/vertex_array.hpp>
 
 #include <glad/glad.h>
 
@@ -33,9 +34,9 @@ int main()
         2, 3, 0
     };
 
-    unsigned int vertex_array;
-    glGenVertexArrays(1, &vertex_array);
-    glBindVertexArray(vertex_array);
+    gl::VertexArray vertex_array;
+    vertex_array.create();
+    vertex_array.bind();
 
     unsigned int vertex_buffer;
     glGenBuffers(1, &vertex_buffer);
@@ -56,7 +57,7 @@ int main()
     {
         gl::Commands::clear(gl::color_buffer_bit);
 
-        glBindVertexArray(vertex_array);
+        vertex_array.bind();
         gl::Commands::draw_elements(gl::triangles, 6);
 
         WindowManager::instance().update();
@@ -64,7 +65,7 @@ int main()
 
     glDeleteBuffers(1, &vertex_buffer);
     glDeleteBuffers(1, &indices_buffer);
-    glDeleteVertexArrays(1, &vertex_array);
+    vertex_array.destroy();
 
     WindowManager::instance().destroy();
     return 0;
