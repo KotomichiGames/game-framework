@@ -1,6 +1,5 @@
-#include <platform_factory.hpp>
-
-#include <window_instance.hpp>
+#include <window_manager.hpp>
+#include <window_factory.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -10,31 +9,22 @@ using namespace engine;
 
 int main()
 {
-    const auto factory = PlatformFactory::create_factory();
+    const auto factory = WindowFactory::create_factory();
 
-    WindowInstance::instance().create(factory, { "Context" });
-
-    const auto platform = factory->create_platform();
-    const auto context  = factory->create_context();
-
-    context->create(WindowInstance::instance().handle());
-
-    WindowInstance::instance().open();
+    WindowManager::instance().create(factory, { "Context" });
+    WindowManager::instance().open();
 
     gl::Functions::load();
 
     gl::Commands::clear(0.5f, 0.5f, 0.5f);
 
-    while (WindowInstance::instance().is_active())
+    while (WindowManager::instance().is_active())
     {
         gl::Commands::clear(gl::color_buffer_bit);
 
-        context->update();
-        platform->update();
+        WindowManager::instance().update();
     }
 
-    context->destroy();
-
-    WindowInstance::instance().destroy();
+    WindowManager::instance().destroy();
     return 0;
 }
