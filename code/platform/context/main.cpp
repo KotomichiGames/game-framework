@@ -1,5 +1,5 @@
-#include <window_manager.hpp>
 #include <window_factory.hpp>
+#include <window_manager.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -7,11 +7,11 @@
 
 using namespace engine;
 
-int main()
+int32_t main()
 {
     const auto factory = WindowFactory::create_factory();
 
-    WindowManager::instance().create(factory, { "Context" });
+    WindowManager::instance().create(factory, { .title = "Context" });
     WindowManager::instance().open();
 
     gl::Functions::load_core();
