@@ -22,7 +22,7 @@ int32_t main()
 
     gladLoadGL();
 
-    constexpr float vertices[] =
+    constexpr float vertices[]
     {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
