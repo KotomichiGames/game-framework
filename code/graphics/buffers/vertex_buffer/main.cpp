@@ -6,6 +6,8 @@
 #include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
 
+#include <math/vec3.hpp>
+
 #include <glad/glad.h>
 
 using namespace engine;
@@ -22,11 +24,11 @@ int32_t main()
 
     gladLoadGL();
 
-    constexpr float vertices[]
+    const std::vector<math::vec3> vertices
     {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+        { -0.5f, -0.5f, 0.0f },
+        {  0.5f, -0.5f, 0.0f },
+        {  0.0f,  0.5f, 0.0f }
     };
 
     gl::VertexArray vertex_array;
@@ -34,12 +36,12 @@ int32_t main()
     vertex_array.bind();
 
     unsigned int vertex_buffer;
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glCreateBuffers(1, &vertex_buffer);
+    glBindBuffer(gl::array_buffer, vertex_buffer);
+    glNamedBufferData(vertex_buffer, vertices.size() * sizeof(math::vec3), vertices.data(), gl::static_draw);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void*>(nullptr));
+    glVertexAttribPointer(0, 3, gl::type_float, 0, 3 * sizeof(float), static_cast<void*>(nullptr));
 
     gl::Commands::clear(0.5f, 0.5f, 0.5f);
 
@@ -48,7 +50,7 @@ int32_t main()
         gl::Commands::clear(gl::color_buffer_bit);
 
         vertex_array.bind();
-        gl::Commands::draw_arrays(gl::triangles, 3);
+        gl::Commands::draw_arrays(gl::triangles, vertices.size());
 
         core::WindowManager::instance().update();
     }
