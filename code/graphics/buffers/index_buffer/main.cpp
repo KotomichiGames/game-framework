@@ -6,6 +6,8 @@
 #include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
 
+#include <base/buffer_data.hpp>
+
 #include <math/vec3.hpp>
 
 #include <glad/glad.h>
@@ -42,15 +44,19 @@ int32_t main()
     vertex_array.create();
     vertex_array.bind();
 
-    unsigned int vertex_buffer;
-    glCreateBuffers(1, &vertex_buffer);
-    glBindBuffer(gl::array_buffer, vertex_buffer);
-    glNamedBufferData(gl::array_buffer, vertices.size() * sizeof(math::vec3), vertices.data(), gl::static_draw);
+    const base::buffer_data vertex_buffer_data = base::buffer_data::create_from(vertices);
 
-    unsigned int indices_buffer;
-    glCreateBuffers(1, &indices_buffer);
-    glBindBuffer(gl::element_array_buffer, indices_buffer);
-    glNamedBufferData(gl::element_array_buffer, indices.size() * sizeof(uint32_t), indices.data(), gl::static_draw);
+    uint32_t vertex_buffer;
+    gl::glCreateBuffers(1, &vertex_buffer);
+    gl::glBindBuffer(gl::array_buffer, vertex_buffer);
+    gl::glNamedBufferData(vertex_buffer, vertex_buffer_data.size(), vertex_buffer_data.data(), gl::static_draw);
+
+    const base::buffer_data indices_buffer_data = base::buffer_data::create_from(indices);
+
+    uint32_t indices_buffer;
+    gl::glCreateBuffers(1, &indices_buffer);
+    gl::glBindBuffer(gl::element_array_buffer, indices_buffer);
+    gl::glNamedBufferData(indices_buffer, indices_buffer_data.size(), indices_buffer_data.data(), gl::static_draw);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, gl::type_float, 0, 3 * sizeof(float), static_cast<void*>(nullptr));
@@ -67,8 +73,8 @@ int32_t main()
         core::WindowManager::instance().update();
     }
 
-    glDeleteBuffers(1, &vertex_buffer);
-    glDeleteBuffers(1, &indices_buffer);
+    gl::glDeleteBuffers(1, &vertex_buffer);
+    gl::glDeleteBuffers(1, &indices_buffer);
     vertex_array.destroy();
 
     core::WindowManager::instance().destroy();
