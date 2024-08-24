@@ -1,20 +1,20 @@
-#include <window_factory.hpp>
-#include <window_manager.hpp>
+#include <core/window_factory.hpp>
+#include <core/window_manager.hpp>
 
 using namespace engine;
 
 int32_t main()
 {
-    const auto factory = WindowFactory::create_factory();
+    const auto factory = core::WindowFactory::create_factory();
 
-    WindowManager::instance().create(factory, { .title = "Window" });
-    WindowManager::instance().open();
+    core::WindowManager::instance().create(factory, { .title = "Window" });
+    core::WindowManager::instance().open();
 
-    while (WindowManager::instance().is_active())
+    while (core::WindowManager::instance().is_active())
     {
-        WindowManager::instance().update();
+        core::WindowManager::instance().update();
     }
 
-    WindowManager::instance().destroy();
+    core::WindowManager::instance().destroy();
     return 0;
 }

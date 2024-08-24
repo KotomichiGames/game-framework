@@ -1,5 +1,5 @@
-#include <window_factory.hpp>
-#include <window_manager.hpp>
+#include <core/window_factory.hpp>
+#include <core/window_manager.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -12,10 +12,10 @@ using namespace engine;
 
 int32_t main()
 {
-    const auto factory = WindowFactory::create_factory();
+    const auto factory = core::WindowFactory::create_factory();
 
-    WindowManager::instance().create(factory, { .title = "Vertex Buffer" });
-    WindowManager::instance().open();
+    core::WindowManager::instance().create(factory, { .title = "Vertex Buffer" });
+    core::WindowManager::instance().open();
 
     gl::Functions::load_core();
     gl::Functions::load_extended();
@@ -43,19 +43,19 @@ int32_t main()
 
     gl::Commands::clear(0.5f, 0.5f, 0.5f);
 
-    while (WindowManager::instance().is_active())
+    while (core::WindowManager::instance().is_active())
     {
         gl::Commands::clear(gl::color_buffer_bit);
 
         vertex_array.bind();
         gl::Commands::draw_arrays(gl::triangles, 3);
 
-        WindowManager::instance().update();
+        core::WindowManager::instance().update();
     }
 
     glDeleteBuffers(1, &vertex_buffer);
     vertex_array.destroy();
 
-    WindowManager::instance().destroy();
+    core::WindowManager::instance().destroy();
     return 0;
 }
