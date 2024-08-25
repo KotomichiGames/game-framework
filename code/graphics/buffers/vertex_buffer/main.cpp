@@ -5,8 +5,7 @@
 #include <opengl/commands.hpp>
 #include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
-
-#include <base/buffer_data.hpp>
+#include <opengl/buffer.hpp>
 
 #include <math/vec3.hpp>
 
@@ -37,12 +36,10 @@ int32_t main()
     vertex_array.create();
     vertex_array.bind();
 
-    const base::buffer_data vertex_buffer_data = base::buffer_data::create_from(vertices);
-
-    uint32_t vertex_buffer;
-    gl::glCreateBuffers(1, &vertex_buffer);
-    gl::glBindBuffer(gl::array_buffer, vertex_buffer);
-    gl::glNamedBufferData(vertex_buffer, vertex_buffer_data.size(), vertex_buffer_data.data(), gl::static_draw);
+    gl::Buffer vertex_buffer;
+    vertex_buffer.create();
+    vertex_buffer.bind(gl::array_buffer);
+    vertex_buffer.data(base::buffer_data::create_from(vertices), gl::static_draw);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, gl::type_float, 0, 3 * sizeof(float), static_cast<void*>(nullptr));
@@ -59,7 +56,7 @@ int32_t main()
         core::WindowManager::instance().update();
     }
 
-    gl::glDeleteBuffers(1, &vertex_buffer);
+    vertex_buffer.destroy();
     vertex_array.destroy();
 
     core::WindowManager::instance().destroy();
