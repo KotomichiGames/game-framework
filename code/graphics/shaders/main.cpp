@@ -6,6 +6,7 @@
 #include <opengl/commands.hpp>
 #include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
+#include <opengl/shader_stage.hpp>
 
 #include <math/vec3.hpp>
 
@@ -33,17 +34,19 @@ int32_t main()
     const char* vertex_stage_temp = vertex_stage_data.data();
     const auto fragment_stage_temp = fragment_stage_data.data();
 
-    const uint32_t vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_stage_temp, nullptr);
-    glCompileShader(vertex_shader);
+    gl::ShaderStage vertex_shader { gl::vertex_shader };
+    vertex_shader.create();
+    glShaderSource(vertex_shader.handle(), 1, &vertex_stage_temp, nullptr);
+    glCompileShader(vertex_shader.handle());
 
-    const uint32_t fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_stage_temp, nullptr);
-    glCompileShader(fragment_shader);
+    gl::ShaderStage fragment_shader { gl::fragment_shader };
+    fragment_shader.create();
+    glShaderSource(fragment_shader.handle(), 1, &fragment_stage_temp, nullptr);
+    glCompileShader(fragment_shader.handle());
 
     const uint32_t diffuse_shader = glCreateProgram();
-    glAttachShader(diffuse_shader, vertex_shader);
-    glAttachShader(diffuse_shader, fragment_shader);
+    glAttachShader(diffuse_shader, vertex_shader.handle());
+    glAttachShader(diffuse_shader, fragment_shader.handle());
     glLinkProgram(diffuse_shader);
 
     GLint success;
@@ -55,8 +58,8 @@ int32_t main()
         std::cerr << "Shader program linking failed:\n" << info_log << std::endl;
     }
 
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
+    vertex_shader.destroy();
+    fragment_shader.destroy();
 
     const std::vector<math::vec3> vertices
     {
@@ -103,6 +106,8 @@ int32_t main()
     vertex_buffer.destroy();
     indices_buffer.destroy();
     vertex_array.destroy();
+
+    glDeleteProgram(diffuse_shader);
 
     core::WindowManager::instance().destroy();
     return 0;
