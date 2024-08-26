@@ -1,5 +1,6 @@
 #include <core/window_factory.hpp>
 #include <core/window_manager.hpp>
+#include <core/file.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -9,6 +10,8 @@
 #include <math/vec3.hpp>
 
 #include <glad/glad.h>
+
+#include <iostream>
 
 using namespace engine;
 
@@ -21,6 +24,39 @@ int32_t main()
 
     gl::Functions::load_core();
     gl::Functions::load_extended();
+
+    gladLoadGL();
+
+    const auto vertex_stage_data   = core::File::read("diffuse_vert.glsl");
+    const auto fragment_stage_data = core::File::read("diffuse_frag.glsl");
+
+    const char* vertex_stage_temp = vertex_stage_data.data();
+    const auto fragment_stage_temp = fragment_stage_data.data();
+
+    const uint32_t vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_stage_temp, nullptr);
+    glCompileShader(vertex_shader);
+
+    const uint32_t fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_stage_temp, nullptr);
+    glCompileShader(fragment_shader);
+
+    const uint32_t diffuse_shader = glCreateProgram();
+    glAttachShader(diffuse_shader, vertex_shader);
+    glAttachShader(diffuse_shader, fragment_shader);
+    glLinkProgram(diffuse_shader);
+
+    GLint success;
+    glGetProgramiv(diffuse_shader, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        GLchar info_log[512];
+        glGetProgramInfoLog(diffuse_shader, 512, nullptr, info_log);
+        std::cerr << "Shader program linking failed:\n" << info_log << std::endl;
+    }
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
 
     const std::vector<math::vec3> vertices
     {
@@ -55,6 +91,8 @@ int32_t main()
     while (core::WindowManager::instance().is_active())
     {
         gl::Commands::clear(gl::color_buffer_bit);
+
+        glUseProgram(diffuse_shader);
 
         vertex_array.bind();
         gl::Commands::draw_elements(gl::triangles, indices.size());
