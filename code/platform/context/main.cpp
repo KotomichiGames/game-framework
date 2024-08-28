@@ -1,5 +1,6 @@
 #include <core/window_factory.hpp>
 #include <core/window_manager.hpp>
+#include <core/rgb.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -16,7 +17,7 @@ int32_t main()
 
     gl::Functions::load_core();
 
-    gl::Commands::clear(0.5f, 0.5f, 0.5f);
+    gl::Commands::clear(core::color::gray);
 
     while (core::WindowManager::instance().is_active())
     {

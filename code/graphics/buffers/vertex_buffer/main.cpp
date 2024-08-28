@@ -1,5 +1,6 @@
 #include <core/window_factory.hpp>
 #include <core/window_manager.hpp>
+#include <core/rgb.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -29,14 +30,14 @@ int32_t main()
 
     gl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(base::buffer_data::create_from(vertices), gl::static_draw);
+    vertex_buffer.data(core::buffer_data::create_from(vertices), gl::static_draw);
 
     gl::VertexArray vertex_array;
     vertex_array.create();
     vertex_array.attach_vertex_buffer(vertex_buffer, sizeof(math::vec3));
-    vertex_array.attribute({ 0, 3, gl::type_float, 0 });
+    vertex_array.attribute({ 0, 3, gl::type_float });
 
-    gl::Commands::clear(0.5f, 0.5f, 0.5f);
+    gl::Commands::clear(core::color::gray);
 
     while (core::WindowManager::instance().is_active())
     {
