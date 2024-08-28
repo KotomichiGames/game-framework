@@ -6,13 +6,9 @@
 #include <opengl/commands.hpp>
 #include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
-#include <opengl/shader_stage.hpp>
+#include <opengl/shader.hpp>
 
 #include <math/vec3.hpp>
-
-#include <glad/glad.h>
-
-#include <iostream>
 
 using namespace engine;
 
@@ -24,8 +20,6 @@ int32_t main()
     gl::Functions::load_core();
     gl::Functions::load_extended();
 
-    gladLoadGL();
-
     gl::ShaderStage vertex_stage { gl::vertex_stage };
     vertex_stage.create();
     vertex_stage.source(core::File::read("default_shader_spv.vert", std::ios::binary));
@@ -34,19 +28,11 @@ int32_t main()
     fragment_stage.create();
     fragment_stage.source(core::File::read("default_shader_spv.frag", std::ios::binary));
 
-    const uint32_t default_shader = glCreateProgram();
-    glAttachShader(default_shader, vertex_stage.handle());
-    glAttachShader(default_shader, fragment_stage.handle());
-    glLinkProgram(default_shader);
-
-    GLint success;
-    glGetProgramiv(default_shader, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        GLchar info_log[512];
-        glGetProgramInfoLog(default_shader, 512, nullptr, info_log);
-        std::cerr << "Shader program linking failed:\n" << info_log << std::endl;
-    }
+    gl::Shader default_shader;
+    default_shader.create();
+    default_shader.attach(vertex_stage);
+    default_shader.attach(fragment_stage);
+    default_shader.compile();
 
     vertex_stage.destroy();
     fragment_stage.destroy();
@@ -85,7 +71,7 @@ int32_t main()
     {
         gl::Commands::clear(gl::color_buffer_bit);
 
-        glUseProgram(default_shader);
+        default_shader.bind();
 
         vertex_array.bind();
         gl::Commands::draw_elements(gl::triangles, indices.size());
@@ -97,7 +83,7 @@ int32_t main()
     indices_buffer.destroy();
     vertex_array.destroy();
 
-    glDeleteProgram(default_shader);
+    default_shader.destroy();
 
     core::WindowManager::instance().destroy();
     return 0;
