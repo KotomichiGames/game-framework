@@ -26,21 +26,20 @@ int32_t main()
 
     gladLoadGL();
 
-    const auto vertex_stage_data   = core::File::read("default_shader.vert");
-    const auto fragment_stage_data = core::File::read("default_shader.frag");
-
-    const auto vertex_stage_temp   = vertex_stage_data.data();
-    const auto fragment_stage_temp = fragment_stage_data.data();
+    const auto vertex_stage_data   = core::File::read("default_shader_spv.vert", std::ios::binary);
+    const auto fragment_stage_data = core::File::read("default_shader_spv.frag", std::ios::binary);
 
     gl::ShaderStage vertex_stage { gl::vertex_stage };
     vertex_stage.create();
-    glShaderSource(vertex_stage.handle(), 1, &vertex_stage_temp, nullptr);
-    glCompileShader(vertex_stage.handle());
+    const uint32_t vertex_stange_handle = vertex_stage.handle();
+    glShaderBinary(1, &vertex_stange_handle, gl::shader_binary_format, vertex_stage_data.data(), vertex_stage_data.size());
+    glSpecializeShader(vertex_stange_handle, "main", 0, nullptr, nullptr);
 
     gl::ShaderStage fragment_stage { gl::fragment_stage };
     fragment_stage.create();
-    glShaderSource(fragment_stage.handle(), 1, &fragment_stage_temp, nullptr);
-    glCompileShader(fragment_stage.handle());
+    const uint32_t fragment_stange_handle = fragment_stage.handle();
+    glShaderBinary(1, &fragment_stange_handle, gl::shader_binary_format, fragment_stage_data.data(), fragment_stage_data.size());
+    glSpecializeShader(fragment_stange_handle, "main", 0, nullptr, nullptr);
 
     const uint32_t default_shader = glCreateProgram();
     glAttachShader(default_shader, vertex_stage.handle());
