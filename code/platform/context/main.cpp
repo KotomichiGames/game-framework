@@ -1,4 +1,3 @@
-#include <core/window_factory.hpp>
 #include <core/window_manager.hpp>
 #include <core/rgb.hpp>
 
@@ -10,9 +9,7 @@ using namespace engine;
 
 int32_t main()
 {
-    const auto factory = core::WindowFactory::create_factory();
-
-    core::WindowManager::instance().create(factory, { .title = "Context" });
+    core::WindowManager::instance().create({ .title = "Context" });
     core::WindowManager::instance().open();
 
     gl::Functions::load_core();
