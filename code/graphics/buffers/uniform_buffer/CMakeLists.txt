@@ -8,6 +8,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG 
 #=======================================================================================================================
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 target_link_libraries(${PROJECT_NAME}   PRIVATE editor::tools)
-target_link_libraries(${PROJECT_NAME}   PRIVATE engine::core engine::platform engine::graphics)
+target_link_libraries(${PROJECT_NAME}   PRIVATE engine::core engine::platform engine::graphics glad)
 target_sources(${PROJECT_NAME}          PRIVATE main.cpp)
 #=======================================================================================================================

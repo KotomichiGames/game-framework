@@ -10,6 +10,8 @@
 #include <opengl/vertex_array.hpp>
 #include <opengl/shader.hpp>
 
+#include <glad/glad.h>
+
 int32_t main()
 {
     engine::core::WindowManager::instance().create({ .title = "Uniform Buffer" });
@@ -17,6 +19,8 @@ int32_t main()
 
     engine::gl::Functions::load_core();
     engine::gl::Functions::load_extended();
+
+    gladLoadGL();
 
     engine::gl::ShaderStage vertex_stage { engine::gl::vertex_stage };
     vertex_stage.create();
@@ -50,6 +54,13 @@ int32_t main()
     vertex_array.attach_vertex_buffer(vertex_buffer, sizeof(editor::core::vertex));
     vertex_array.attach_indices_buffer(indices_buffer);
     vertex_array.attribute({ 0, 3, engine::gl::type_float });
+
+    constexpr engine::core::rgb material_color { 0.6f, 0.2f, 0.4f };
+
+    engine::gl::Buffer material_buffer;
+    material_buffer.create();
+    material_buffer.bind(0);
+    material_buffer.data(engine::core::buffer_data::create_from(&material_color), engine::gl::static_draw);
 
     engine::gl::Commands::clear(engine::core::color::gray);
 
