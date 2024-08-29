@@ -8,47 +8,45 @@
 
 #include <math/vec3.hpp>
 
-using namespace engine;
-
 int32_t main()
 {
-    core::WindowManager::instance().create({ .title = "Vertex Buffer" });
-    core::WindowManager::instance().open();
+    engine::core::WindowManager::instance().create({ .title = "Vertex Buffer" });
+    engine::core::WindowManager::instance().open();
 
-    gl::Functions::load_core();
-    gl::Functions::load_extended();
+    engine::gl::Functions::load_core();
+    engine::gl::Functions::load_extended();
 
-    const std::vector<math::vec3> vertices
+    const std::vector<engine::math::vec3> vertices
     {
         { -0.5f, -0.5f, 0.0f },
         {  0.5f, -0.5f, 0.0f },
         {  0.0f,  0.5f, 0.0f }
     };
 
-    gl::Buffer vertex_buffer;
+    engine::gl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(core::buffer_data::create_from(vertices), gl::static_draw);
+    vertex_buffer.data(engine::core::buffer_data::create_from(vertices), engine::gl::static_draw);
 
-    gl::VertexArray vertex_array;
+    engine::gl::VertexArray vertex_array;
     vertex_array.create();
-    vertex_array.attach_vertex_buffer(vertex_buffer, sizeof(math::vec3));
-    vertex_array.attribute({ 0, 3, gl::type_float });
+    vertex_array.attach_vertex_buffer(vertex_buffer, sizeof(engine::math::vec3));
+    vertex_array.attribute({ 0, 3, engine::gl::type_float });
 
-    gl::Commands::clear(core::color::gray);
+    engine::gl::Commands::clear(engine::core::color::gray);
 
-    while (core::WindowManager::instance().is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
-        gl::Commands::clear(gl::color_buffer_bit);
+        engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
         vertex_array.bind();
-        gl::Commands::draw_arrays(gl::triangles, vertices.size());
+        engine::gl::Commands::draw_arrays(engine::gl::triangles, vertices.size());
 
-        core::WindowManager::instance().update();
+        engine::core::WindowManager::instance().update();
     }
 
     vertex_buffer.destroy();
     vertex_array.destroy();
 
-    core::WindowManager::instance().destroy();
+    engine::core::WindowManager::instance().destroy();
     return 0;
 }

@@ -5,24 +5,22 @@
 #include <opengl/commands.hpp>
 #include <opengl/macros.hpp>
 
-using namespace engine;
-
 int32_t main()
 {
-    core::WindowManager::instance().create({ .title = "Context" });
-    core::WindowManager::instance().open();
+    engine::core::WindowManager::instance().create({ .title = "Context" });
+    engine::core::WindowManager::instance().open();
 
-    gl::Functions::load_core();
+    engine::gl::Functions::load_core();
 
-    gl::Commands::clear(core::color::gray);
+    engine::gl::Commands::clear(engine::core::color::gray);
 
-    while (core::WindowManager::instance().is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
-        gl::Commands::clear(gl::color_buffer_bit);
+        engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
-        core::WindowManager::instance().update();
+        engine::core::WindowManager::instance().update();
     }
 
-    core::WindowManager::instance().destroy();
+    engine::core::WindowManager::instance().destroy();
     return 0;
 }

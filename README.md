@@ -15,7 +15,6 @@
     - Time
 
 - Graphics
-    - Shaders
     - Uniform Buffer
     - Transformations
     - Textures

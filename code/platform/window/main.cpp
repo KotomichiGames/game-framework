@@ -1,17 +1,15 @@
 #include <core/window_manager.hpp>
 
-using namespace engine;
-
 int32_t main()
 {
-    core::WindowManager::instance().create({ .title = "Window" });
-    core::WindowManager::instance().open();
+    engine::core::WindowManager::instance().create({ .title = "Window" });
+    engine::core::WindowManager::instance().open();
 
-    while (core::WindowManager::instance().is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
-        core::WindowManager::instance().update();
+        engine::core::WindowManager::instance().update();
     }
 
-    core::WindowManager::instance().destroy();
+    engine::core::WindowManager::instance().destroy();
     return 0;
 }
