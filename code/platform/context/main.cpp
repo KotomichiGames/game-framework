@@ -1,5 +1,4 @@
 #include <core/window_manager.hpp>
-#include <core/rgb.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>

@@ -1,16 +1,13 @@
 #include <core/window_manager.hpp>
 #include <core/file.hpp>
-#include <core/rgb.hpp>
+#include <core/time.hpp>
 
 #include <core/primivite_shapes.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
-#include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
 #include <opengl/shader.hpp>
-
-#include <glad/glad.h>
 
 int32_t main()
 {
@@ -19,8 +16,6 @@ int32_t main()
 
     engine::gl::Functions::load_core();
     engine::gl::Functions::load_extended();
-
-    gladLoadGL();
 
     engine::gl::ShaderStage vertex_stage { engine::gl::vertex_stage };
     vertex_stage.create();
@@ -43,11 +38,11 @@ int32_t main()
 
     engine::gl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(engine::core::buffer_data::create_from(vertices), engine::gl::static_draw);
+    vertex_buffer.data(engine::core::buffer_data::create_from(vertices));
 
     engine::gl::Buffer indices_buffer;
     indices_buffer.create();
-    indices_buffer.data(engine::core::buffer_data::create_from(indices), engine::gl::static_draw);
+    indices_buffer.data(engine::core::buffer_data::create_from(indices));
 
     engine::gl::VertexArray vertex_array;
     vertex_array.create();
@@ -55,20 +50,28 @@ int32_t main()
     vertex_array.attach_indices_buffer(indices_buffer);
     vertex_array.attribute({ 0, 3, engine::gl::type_float });
 
-    constexpr engine::core::rgb material_color { 0.6f, 0.2f, 0.4f };
+    engine::core::rgb material_color { 0.1f, 0.0f, 0.0f };
 
     engine::gl::Buffer material_buffer;
     material_buffer.create();
-    material_buffer.bind(0);
-    material_buffer.data(engine::core::buffer_data::create_from(&material_color), engine::gl::static_draw);
+    material_buffer.bind(static_cast<int32_t>(engine::core::buffer_location::material));
+    material_buffer.data(engine::core::buffer_data::create_from(&material_color), engine::gl::dynamic_draw);
 
     engine::gl::Commands::clear(engine::core::color::gray);
 
+    engine::core::Time time;
+    time.init();
+
     while (engine::core::WindowManager::instance().is_active())
     {
+        time.update();
+
         engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
         default_shader.bind();
+
+        material_color.r = std::abs(std::sin(engine::core::Time::total_time()));
+        material_buffer.sub_data(engine::core::buffer_data::create_from(&material_color));
 
         vertex_array.bind();
         engine::gl::Commands::draw_elements(engine::gl::triangles, indices.size());

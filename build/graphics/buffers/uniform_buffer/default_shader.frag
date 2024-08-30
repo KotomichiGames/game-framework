@@ -2,7 +2,7 @@
 
 layout (location = 0) out vec4 out_color;
 
-layout (binding = 0, std140) uniform u_material
+layout (binding = 1, std140) uniform u_material
 {
     vec3 diffuse;
 }

@@ -1,9 +1,7 @@
 #include <core/window_manager.hpp>
-#include <core/rgb.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
-#include <opengl/macros.hpp>
 #include <opengl/vertex_array.hpp>
 
 #include <math/vec3.hpp>
@@ -25,7 +23,7 @@ int32_t main()
 
     engine::gl::Buffer vertex_buffer;
     vertex_buffer.create();
-    vertex_buffer.data(engine::core::buffer_data::create_from(vertices), engine::gl::static_draw);
+    vertex_buffer.data(engine::core::buffer_data::create_from(vertices));
 
     engine::gl::VertexArray vertex_array;
     vertex_array.create();
