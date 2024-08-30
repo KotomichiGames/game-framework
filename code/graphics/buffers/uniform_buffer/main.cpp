@@ -80,6 +80,7 @@ int32_t main()
     indices_buffer.destroy();
     vertex_array.destroy();
 
+    material_buffer.destroy();
     default_shader.destroy();
 
     engine::core::WindowManager::instance().destroy();
