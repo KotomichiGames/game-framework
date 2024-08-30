@@ -1,51 +1,52 @@
-#include <glfw/factory.hpp>
-#include <window_instance.hpp>
+#include <core/window_manager.hpp>
+#include <core/rgb.hpp>
 
-#include <glad/glad.h>
+#include <opengl/functions.hpp>
+#include <opengl/commands.hpp>
+#include <opengl/macros.hpp>
+#include <opengl/vertex_array.hpp>
 
-int main()
+#include <math/vec3.hpp>
+
+int32_t main()
 {
-    const auto platform_factory = std::make_shared<engine::glfw::Factory>();
+    engine::core::WindowManager::instance().create({ .title = "Vertex Buffer" });
+    engine::core::WindowManager::instance().open();
 
-    auto& window = engine::WindowInstance::instance();
-    window.create(platform_factory, { "Vertex Buffer" });
+    engine::gl::Functions::load_core();
+    engine::gl::Functions::load_extended();
 
-    gladLoadGL();
-
-    const float vertices[] =
+    const std::vector<engine::math::vec3> vertices
     {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+        { -0.5f, -0.5f, 0.0f },
+        {  0.5f, -0.5f, 0.0f },
+        {  0.0f,  0.5f, 0.0f }
     };
 
-    unsigned int vertex_array;
-    glGenVertexArrays(1, &vertex_array);
-    glBindVertexArray(vertex_array);
+    engine::gl::Buffer vertex_buffer;
+    vertex_buffer.create();
+    vertex_buffer.data(engine::core::buffer_data::create_from(vertices), engine::gl::static_draw);
 
-    unsigned int vertex_buffer;
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    engine::gl::VertexArray vertex_array;
+    vertex_array.create();
+    vertex_array.attach_vertex_buffer(vertex_buffer, sizeof(engine::math::vec3));
+    vertex_array.attribute({ 0, 3, engine::gl::type_float });
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    engine::gl::Commands::clear(engine::core::color::gray);
 
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-
-    while (window.is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
-        glBindVertexArray(vertex_array);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        vertex_array.bind();
+        engine::gl::Commands::draw_arrays(engine::gl::triangles, vertices.size());
 
-        window.update();
+        engine::core::WindowManager::instance().update();
     }
 
-    glDeleteBuffers(1, &vertex_buffer);
-    glDeleteVertexArrays(1, &vertex_array);
+    vertex_buffer.destroy();
+    vertex_array.destroy();
 
-    window.destroy();
+    engine::core::WindowManager::instance().destroy();
     return 0;
 }

@@ -1,22 +1,15 @@
-#include <platform_factory.hpp>
+#include <core/window_manager.hpp>
 
-#include <window_instance.hpp>
-
-using namespace engine;
-
-int main()
+int32_t main()
 {
-    const auto factory = PlatformFactory::create_factory();
+    engine::core::WindowManager::instance().create({ .title = "Window" });
+    engine::core::WindowManager::instance().open();
 
-    WindowInstance::instance().create(factory, { "Window" });
-
-    const auto platform = factory->create_platform();
-
-    while (WindowInstance::instance().is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
-        platform->update();
+        engine::core::WindowManager::instance().update();
     }
 
-    WindowInstance::instance().destroy();
+    engine::core::WindowManager::instance().destroy();
     return 0;
 }

@@ -1,37 +1,26 @@
-#include <windows/factory.hpp>
-#include <window_instance.hpp>
+#include <core/window_manager.hpp>
+#include <core/rgb.hpp>
 
-#include <glfw/factory.hpp>
-#include <glad/glad.h>
+#include <opengl/functions.hpp>
+#include <opengl/commands.hpp>
+#include <opengl/macros.hpp>
 
-using namespace engine;
-
-int main()
+int32_t main()
 {
-    const auto glfw_factory = std::make_shared<glfw::Factory>();
-    //const auto win32_factory = std::make_shared<engine::win32::Factory>();
+    engine::core::WindowManager::instance().create({ .title = "Context" });
+    engine::core::WindowManager::instance().open();
 
-    WindowInstance::instance().create(glfw_factory, { "Window" });
+    engine::gl::Functions::load_core();
 
-    const auto platform = glfw_factory->create_platform();
-    const auto context  = glfw_factory->create_context();
+    engine::gl::Commands::clear(engine::core::color::gray);
 
-    context->create(WindowInstance::instance().handle());
-
-    gladLoadGL();
-
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-
-    while (WindowInstance::instance().is_active())
+    while (engine::core::WindowManager::instance().is_active())
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
-        context->update();
-        platform->update();
+        engine::core::WindowManager::instance().update();
     }
 
-    context->destroy();
-
-    WindowInstance::instance().destroy();
+    engine::core::WindowManager::instance().destroy();
     return 0;
 }

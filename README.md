@@ -1,5 +1,7 @@
 # Game Framework
 
+## Roadmap
+
 - Core
     - Math
     - Event System
@@ -9,16 +11,12 @@
         - Binary
 
 - Platform
-    - Context
     - Input
     - Time
 
 - Graphics
-    - Vertex Buffer
-    - Index  Buffer
-    - Shaders
-    - Transformations
     - Uniform Buffer
+    - Transformations
     - Textures
         - Sampler
     - Basic Materials
@@ -37,7 +35,7 @@
         - Smoke
 
 - Lighting
-    - Diffuse Lighting
+    - Diffuse  Lighting
     - Specular Lighting
     - Directional Light
     - Point Light
