@@ -9,13 +9,17 @@
 #include <opengl/vertex_array.hpp>
 #include <opengl/shader.hpp>
 
+#include <glad/glad.h>
+
 int32_t main()
 {
-    engine::core::WindowManager::instance().create({ .title = "Uniform Buffer" });
+    engine::core::WindowManager::instance().create({ .title = "Transformations" });
     engine::core::WindowManager::instance().open();
 
     engine::gl::Functions::load_core();
     engine::gl::Functions::load_extended();
+
+    gladLoadGL();
 
     engine::gl::ShaderStage vertex_stage { engine::gl::vertex_stage };
     vertex_stage.create();
@@ -50,12 +54,12 @@ int32_t main()
     vertex_array.attach_indices_buffer(indices_buffer);
     vertex_array.attribute({ 0, 3, engine::gl::type_float });
 
-    engine::core::rgb material_color { 1.0f, 0.0f, 0.0f };
+    constexpr engine::core::rgb material_color { 1.0f, 0.0f, 0.0f };
 
     engine::gl::Buffer material_buffer;
     material_buffer.create();
     material_buffer.bind(static_cast<int32_t>(engine::core::buffer_location::material));
-    material_buffer.data(engine::core::buffer_data::create_from(&material_color), engine::gl::dynamic_draw);
+    material_buffer.data(engine::core::buffer_data::create_from(&material_color));
 
     engine::gl::Commands::clear(engine::core::color::gray);
 
@@ -69,9 +73,6 @@ int32_t main()
         engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
         default_shader.bind();
-
-        material_color.r = std::abs(std::sin(engine::core::Time::total_time()));
-        material_buffer.sub_data(engine::core::buffer_data::create_from(&material_color));
 
         vertex_array.bind();
         engine::gl::Commands::draw_elements(engine::gl::triangles, indices.size());

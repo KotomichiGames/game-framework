@@ -4,3 +4,5 @@ set(BUILD_FOLDER_PATH "${CMAKE_SOURCE_DIR}/build/graphics")
 add_subdirectory(buffers)
 add_subdirectory(shaders)
 #=======================================================================================================================
+add_subdirectory(transformations)
+#=======================================================================================================================
