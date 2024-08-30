@@ -2,7 +2,7 @@
 #include <core/file.hpp>
 #include <core/rgb.hpp>
 
-#include <core/primivites.hpp>
+#include <core/primivite_shapes.hpp>
 
 #include <opengl/functions.hpp>
 #include <opengl/commands.hpp>
@@ -39,7 +39,7 @@ int32_t main()
     vertex_stage.destroy();
     fragment_stage.destroy();
 
-    const auto [vertices, indices] = editor::core::Primivites::create_plane();
+    const auto [vertices, indices] = editor::core::PrimiviteShapes::create_plane();
 
     engine::gl::Buffer vertex_buffer;
     vertex_buffer.create();
