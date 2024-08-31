@@ -66,7 +66,7 @@ int32_t main()
 
     engine::gl::Buffer material_buffer;
     material_buffer.create();
-    material_buffer.bind(static_cast<int32_t>(engine::core::buffer_location::material));
+    material_buffer.bind(engine::core::buffer_location::material);
     material_buffer.data(engine::core::buffer_data::create_from(&material_color));
 
     #pragma endregion
