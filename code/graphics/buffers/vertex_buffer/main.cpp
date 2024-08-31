@@ -14,6 +14,8 @@ int32_t main()
     engine::gl::Functions::load_core();
     engine::gl::Functions::load_extended();
 
+    #pragma region buffers
+
     const std::vector<engine::math::vec3> vertices
     {
         { -0.5f, -0.5f, 0.0f },
@@ -30,6 +32,8 @@ int32_t main()
     vertex_array.attach_vertex_buffer(vertex_buffer, sizeof(engine::math::vec3));
     vertex_array.attribute({ 0, 3, engine::gl::type_float });
 
+    #pragma endregion
+
     engine::gl::Commands::clear(engine::core::color::gray);
 
     while (engine::core::WindowManager::instance().is_active())
@@ -42,8 +46,12 @@ int32_t main()
         engine::core::WindowManager::instance().update();
     }
 
+    #pragma region cleanup
+
     vertex_buffer.destroy();
     vertex_array.destroy();
+
+    #pragma endregion
 
     engine::core::WindowManager::instance().destroy();
     return 0;

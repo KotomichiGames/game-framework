@@ -17,6 +17,8 @@ int32_t main()
     engine::gl::Functions::load_core();
     engine::gl::Functions::load_extended();
 
+    #pragma region shaders
+
     engine::gl::ShaderStage vertex_stage { engine::gl::vertex_stage };
     vertex_stage.create();
     vertex_stage.source(engine::core::File::read("default_shader_spv.vert", std::ios::binary));
@@ -34,6 +36,9 @@ int32_t main()
     vertex_stage.destroy();
     fragment_stage.destroy();
 
+    #pragma endregion
+    #pragma region buffers
+
     const auto [vertices, indices] = editor::core::PrimiviteShapes::create_plane();
 
     engine::gl::Buffer vertex_buffer;
@@ -50,12 +55,17 @@ int32_t main()
     vertex_array.attach_indices_buffer(indices_buffer);
     vertex_array.attribute({ 0, 3, engine::gl::type_float });
 
+    #pragma endregion
+    #pragma region uniforms
+
     engine::core::rgb material_color { 1.0f, 0.0f, 0.0f };
 
     engine::gl::Buffer material_buffer;
     material_buffer.create();
     material_buffer.bind(static_cast<int32_t>(engine::core::buffer_location::material));
     material_buffer.data(engine::core::buffer_data::create_from(&material_color), engine::gl::dynamic_draw);
+
+    #pragma endregion
 
     engine::gl::Commands::clear(engine::core::color::gray);
 
@@ -79,12 +89,16 @@ int32_t main()
         engine::core::WindowManager::instance().update();
     }
 
+    #pragma region cleanup
+
     vertex_buffer.destroy();
     indices_buffer.destroy();
     vertex_array.destroy();
 
     material_buffer.destroy();
     default_shader.destroy();
+
+    #pragma endregion
 
     engine::core::WindowManager::instance().destroy();
     return 0;
