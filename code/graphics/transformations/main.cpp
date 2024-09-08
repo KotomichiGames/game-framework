@@ -11,6 +11,9 @@
 
 #include <glad/glad.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 int32_t main()
 {
     engine::core::WindowManager::instance().create({ .title = "Transformations" });
@@ -62,7 +65,20 @@ int32_t main()
     #pragma endregion
     #pragma region uniforms
 
+    const float aspect_ratio = static_cast<float>(engine::core::WindowManager::instance().width()) /
+                               static_cast<float>(engine::core::WindowManager::instance().height());
+
     constexpr engine::core::rgb material_color { 1.0f, 0.0f, 0.0f };
+    std::vector camera_matrices =
+    {
+        glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, -3.0f }),
+        glm::perspective(glm::radians(45.0f), aspect_ratio, 0.1f, 100.0f)
+    };
+
+    engine::gl::Buffer camera_buffer;
+    camera_buffer.create();
+    camera_buffer.bind(engine::core::buffer_location::camera);
+    camera_buffer.data(engine::core::buffer_data::create_from(camera_matrices));
 
     engine::gl::Buffer material_buffer;
     material_buffer.create();
