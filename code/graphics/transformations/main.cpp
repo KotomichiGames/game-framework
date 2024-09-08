@@ -93,13 +93,22 @@ int32_t main()
 
         engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(engine::core::Time::total_time() * 50.0f), { 0.0f, 0.0f, 1.0f });
-                  model = glm::scale(model, { 0.5f, 0.5f, 0.5f });
-
         default_shader.bind();
-        default_shader.push_matrix4(0, glm::value_ptr(model));
-
         vertex_array.bind();
+
+        glm::mat4 model;
+        model = glm::translate(glm::mat4(1.0f), { -0.75f, 0.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(engine::core::Time::total_time() * -50.0f), { 0.0f, 0.0f, 1.0f });
+        model = glm::scale(model, { 0.5f, 0.5f, 0.5f });
+
+        default_shader.push_matrix4(0, glm::value_ptr(model));
+        engine::gl::Commands::draw_elements(engine::gl::triangles, indices.size());
+
+        model = glm::translate(glm::mat4(1.0f), { 0.75f, 0.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(engine::core::Time::total_time() * 50.0f), { 0.0f, 0.0f, 1.0f });
+        model = glm::scale(model, { 0.5f, 0.5f, 0.5f });
+
+        default_shader.push_matrix4(0, glm::value_ptr(model));
         engine::gl::Commands::draw_elements(engine::gl::triangles, indices.size());
 
         engine::core::WindowManager::instance().update();
