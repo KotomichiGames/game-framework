@@ -9,10 +9,7 @@
 #include <opengl/vertex_array.hpp>
 #include <opengl/shader.hpp>
 
-#include <glad/glad.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <data/camera.hpp>
 
 int32_t main()
 {
@@ -21,8 +18,6 @@ int32_t main()
 
     engine::gl::Functions::load_core();
     engine::gl::Functions::load_extended();
-
-    gladLoadGL();
 
     #pragma region shaders
 
@@ -68,8 +63,8 @@ int32_t main()
     const float aspect_ratio = static_cast<float>(engine::core::WindowManager::instance().width()) /
                                static_cast<float>(engine::core::WindowManager::instance().height());
 
-    constexpr engine::core::rgb material_color { 1.0f, 0.0f, 0.0f };
-    std::vector camera_matrices =
+    constexpr engine::core::rgb    material_color { 1.0f, 0.0f, 0.0f };
+    const     engine::data::camera camera =
     {
         glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, -3.0f }),
         glm::perspective(glm::radians(45.0f), aspect_ratio, 0.1f, 100.0f)
@@ -78,7 +73,7 @@ int32_t main()
     engine::gl::Buffer camera_buffer;
     camera_buffer.create();
     camera_buffer.bind(engine::core::buffer_location::camera);
-    camera_buffer.data(engine::core::buffer_data::create_from(camera_matrices));
+    camera_buffer.data(engine::core::buffer_data::create_from(&camera));
 
     engine::gl::Buffer material_buffer;
     material_buffer.create();
@@ -98,7 +93,11 @@ int32_t main()
 
         engine::gl::Commands::clear(engine::gl::color_buffer_bit);
 
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(engine::core::Time::total_time() * 50.0f), { 0.0f, 0.0f, 1.0f });
+                  model = glm::scale(model, { 0.5f, 0.5f, 0.5f });
+
         default_shader.bind();
+        default_shader.push_matrix4(0, glm::value_ptr(model));
 
         vertex_array.bind();
         engine::gl::Commands::draw_elements(engine::gl::triangles, indices.size());
